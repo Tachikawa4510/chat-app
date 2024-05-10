@@ -9,6 +9,7 @@ class MessagesController < ApplicationController
     @message = @room.messages.new(message_params)
     if @message.save
       redirect_to room_message_path(@room)
+      redirect_to room_messages_path(@room)
     else
       render :index, status: :unprocessable_entity
     end
@@ -17,6 +18,7 @@ class MessagesController < ApplicationController
   private
 
   def message_params
+    params.require(:message).permit(:content).merge(user_id: current_user.id)
     params.require(:message).permit(:content, :image).merge(user_id: current_user.id)
   end
 end
